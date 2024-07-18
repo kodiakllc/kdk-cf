@@ -1,0 +1,9 @@
+# Node modules and macOS gitignores
+npm-debug.log
+node_modules
+.DS_Store
+
+# Local development environment
+.env
+.env.local
+
