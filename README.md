@@ -78,7 +78,7 @@ The following scripts are available in the project:
 
 ```json
 "scripts": {
-  "generate": "ts-node generateFileSummary.ts",
+  "generate": "ts-node src/generateFileSummary.ts",
   "dev": "ts-node src/index.ts"
 }
 ```
