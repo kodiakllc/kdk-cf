@@ -47,7 +47,7 @@ async function main() {
                             console.log(`  Target URL: ${rule.rules[0].action_parameters.from_value.target_url.expression}`);
 
                             // Update the target URL
-                            rule.rules[0].action_parameters.from_value.target_url.expression = 'https://rh.com/';
+                            rule.rules[0].action_parameters.from_value.target_url.expression = 'https://kodiakllc.io/';
 
                             // Send the update request
                             updateRedirectRule(zone.id, rule.id, rule)
