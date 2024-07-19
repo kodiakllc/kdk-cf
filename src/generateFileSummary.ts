@@ -15,7 +15,7 @@ interface FileDetails {
 }
 
 // Utility function to get file details
-async function getFileDetails(filePath: string, git: SimpleGit): Promise<FileDetails> {
+async function getFileDetails(filePath: string, git: SimpleGit, projectRoot: string): Promise<FileDetails> {
     const content = await fs.readFile(filePath, 'utf8');
     const fileExtension = path.extname(filePath).substring(1); // remove the dot
     const numOfLines = content.split('\n').length;
@@ -31,13 +31,13 @@ async function getFileDetails(filePath: string, git: SimpleGit): Promise<FileDet
     }
 
     return {
-        filePath,
-        fileExtension,
-        content,
-        numOfLines,
-        numOfCharacters,
-        diff
-    };
+      filePath: `./${path.relative(projectRoot, filePath)}`,
+      fileExtension,
+      content,
+      numOfLines,
+      numOfCharacters,
+      diff
+  };
 }
 
 // Function to generate file summary
@@ -70,20 +70,20 @@ async function generateFileSummary() {
         // Find all files matching the pattern
         const files = await glob(pattern, options);
 
-        // Filter out files matching .gitignore patterns
-        const filteredFiles = files.filter((file: string) => !ig.ignores(file));
+      // Filter out files matching .gitignore patterns
+      const filteredFiles = files.filter((file: string) => !ig.ignores(file));
 
-        // Generate file details
-        const fileDetailsPromises = filteredFiles.map((file: string) => getFileDetails(path.join(projectRoot, file), git));
-        const fileDetails = await Promise.all(fileDetailsPromises);
+      // Generate file details
+      const fileDetailsPromises = filteredFiles.map((file: string) => getFileDetails(path.join(projectRoot, file), git, projectRoot));
+      const fileDetails = await Promise.all(fileDetailsPromises);
 
-        // Write file details to a JSON file
-        const outputPath = path.join(projectRoot, 'fileSummary.json');
-        await fs.writeJson(outputPath, fileDetails, { spaces: 2 });
-        console.log(`File summary written to ${outputPath}`);
-    } catch (error) {
-        console.error('Error reading files:', error);
-    }
+      // Write file details to a JSON file
+      const outputPath = path.join(projectRoot, 'fileSummary.json');
+      await fs.writeJson(outputPath, fileDetails, { spaces: 2 });
+      console.log(`File summary written to ${outputPath}`);
+  } catch (error) {
+      console.error('Error reading files:', error);
+  }
 }
 
 // Execute the function
